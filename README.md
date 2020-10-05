@@ -1,7 +1,7 @@
+[![Build Status][build-shield]][build-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 [![Code Coverage][coverage-shield]][coverage-url]
-
 <p align="center">
   <h3 align="center">cobi</h3>
 
@@ -103,6 +103,8 @@ Distributed under the MIT License. See `LICENSE` for more information.
 - [cobra](https://github.com/spf13/cobra)
 - [go-prompt](https://github.com/c-bata/go-prompt)
 
+[build-shield]: https://travis-ci.com/arjit95/cobi.svg?token=txysNdyEWfPeQ1w6FLcy&branch=main
+[build-url]: https://travis-ci.com/arjit95/cobi
 [issues-shield]: https://img.shields.io/github/issues/arjit95/vidstream.svg
 [issues-url]: https://github.com/arjit95/vidstream/issues
 [license-shield]: https://img.shields.io/github/license/arjit95/vidstream.svg
