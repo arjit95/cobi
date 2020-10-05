@@ -105,9 +105,9 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 [build-shield]: https://travis-ci.com/arjit95/cobi.svg?branch=main
 [build-url]: https://travis-ci.com/arjit95/cobi
-[issues-shield]: https://img.shields.io/github/issues/arjit95/vidstream.svg
-[issues-url]: https://github.com/arjit95/vidstream/issues
-[license-shield]: https://img.shields.io/github/license/arjit95/vidstream.svg
-[license-url]: https://github.com/arjit95/vidstream/blob/master/LICENSE
+[issues-shield]: https://img.shields.io/github/issues/arjit95/cobi.svg
+[issues-url]: https://github.com/arjit95/cobi/issues
+[license-shield]: https://img.shields.io/github/license/arjit95/cobi.svg
+[license-url]: https://github.com/arjit95/cobi/blob/main/LICENSE
 [coverage-shield]: https://codecov.io/gh/arjit95/cobi/branch/main/graph/badge.svg
 [coverage-url]: https://codecov.io/gh/arjit95/cobi
