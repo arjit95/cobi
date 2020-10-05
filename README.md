@@ -25,6 +25,7 @@
 * [Overview](#overview)
 * [Installing](#installing)
 * [Migrating from cobra](#migrating-from-cobra)
+* [Contributions](#contributions)
 * [License](#license)
 * [Acknowledgements](#acknowledgements)
 
@@ -95,6 +96,9 @@ cmd.Execute()
 cmd.InitDefaultExitCmd()
 cmd.RunInteractive()
 ```
+
+## Contributions
+Contributions are welcome, this was my first experience with golang so a lot of things may not be up to the mark. Feel free to open an issue or raise a pull request.
 
 ## License
 Distributed under the MIT License. See `LICENSE` for more information.
