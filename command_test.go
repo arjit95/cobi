@@ -6,7 +6,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/c-bata/go-prompt"
 	"github.com/spf13/cobra"
 	"github.com/stretchr/testify/assert"
 )
@@ -19,16 +18,14 @@ type scenario struct {
 }
 
 func init() {
-	root = &Command{
-		RootCmd: &cobra.Command{
-			Use:   "copt-test",
-			Short: "Test cases for copt",
-		},
-	}
+	root = NewCommand(&cobra.Command{
+		Use:   "cobi-test",
+		Short: "Test cases for cobi",
+	})
 
 	testCommands := []*Command{
 		&Command{
-			RootCmd: &cobra.Command{
+			Command: &cobra.Command{
 				Use:   "test1",
 				Short: "Description for test1",
 				Args:  cobra.ExactValidArgs(1),
@@ -41,7 +38,7 @@ func init() {
 			},
 		},
 		&Command{
-			RootCmd: &cobra.Command{
+			Command: &cobra.Command{
 				Use: "test2",
 				Run: func(cmd *cobra.Command, args []string) {
 
@@ -50,9 +47,9 @@ func init() {
 		},
 	}
 
-	testCommands[1].RootCmd.LocalFlags().BoolP("debug", "d", false, "Testing debug flag")
+	testCommands[1].LocalFlags().BoolP("debug", "d", false, "Testing debug flag")
 	testCommands[1].AddCommand(&Command{
-		RootCmd: &cobra.Command{
+		Command: &cobra.Command{
 			Use:   "deep",
 			Short: "Nested command for test2",
 			Run:   func(cmd *cobra.Command, args []string) {},
@@ -62,56 +59,52 @@ func init() {
 	for _, cmd := range testCommands {
 		root.AddCommand(cmd)
 	}
-
-	root.InitDefaultExitCmd()
 }
 
 func runScenarios(t *testing.T, scenarios []scenario) {
 	for _, s := range scenarios {
-		buf := prompt.NewBuffer()
-		buf.InsertText(s.command, false, true)
-		suggestions := root.generateSuggestions(*buf.Document())
-
+		suggestions := root.generateSuggestions(s.command)
 		assert.Equal(t, len(s.expectedSuggestion), len(suggestions))
-
-		for idx, suggestion := range suggestions {
-			assert.Equal(t, suggestion.Text, s.expectedSuggestion[idx])
-		}
+		assert.EqualValues(t, s.expectedSuggestion, suggestions)
 	}
 }
 
 func execCommand(cmd *Command, in string) string {
 	buffer := &bytes.Buffer{}
-	bOut := root.RootCmd.OutOrStdout()
-	bErr := root.RootCmd.OutOrStderr()
+	bOut := root.OutOrStdout()
+	bErr := root.OutOrStderr()
 
-	root.RootCmd.SetOut(buffer)
-	root.RootCmd.SetErr(buffer)
+	root.SetOut(buffer)
+	root.SetErr(buffer)
 
-	root.execute(in)
+	err := root.execute(in)
 
-	root.RootCmd.SetOut(bOut)
-	root.RootCmd.SetErr(bErr)
+	root.SetOut(bOut)
+	root.SetErr(bErr)
+
+	if err != nil {
+		return err.Error()
+	}
 
 	return buffer.String()
 }
 
 func TestNumCommands(t *testing.T) {
 	var visibleCmds []string
-	for _, cmd := range root.RootCmd.Commands() {
+	for _, cmd := range root.Commands() {
 		if strings.Index(cmd.Use, "__") != 0 { // Hide complete commands
 			visibleCmds = append(visibleCmds, cmd.Use)
 		}
 	}
 
-	assert.Equal(t, 3, len(visibleCmds))
+	assert.Equal(t, 2, len(visibleCmds))
 }
 
 func TestInvalidShellCommand(t *testing.T) {
 	scenarioTable := []scenario{
 		{
 			command:            `test "S`,
-			expectedSuggestion: []string{},
+			expectedSuggestion: nil,
 		},
 	}
 
