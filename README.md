@@ -6,7 +6,7 @@
   <h3 align="center">cobi</h3>
 
   <p align="center">
-    cobi (cobra Interactive) is a small wrapper on top of <a href="https://github.com/spf13/cobra">cobra</a> and <a href="https://github.com/c-bata/go-prompt">go-prompt</a> to build interactive cli applications
+    cobi (cobra Interactive) is a small wrapper on top of <a href="https://github.com/spf13/cobra">cobra</a> and <a href="https://github.com/rivo/tview">tview</a> to build interactive cli applications
     <br />
     <a href="https://github.com/arjit95/cobi#docs"><strong>Explore the docs »</strong></a>
     <br />
@@ -69,22 +69,17 @@ This would be re-written as
 
 ```go
 import (
-    "github.com/c-bata/go-prompt"
     "github.com/arjit95/cobi"
     "github.com/spf13/cobra"
 )
 
 var cmd = &cobi.Command {
-    Root: &cobra.Command{
+    Command: &cobra.Command{
         Use:   "demo",
         Short: "This is a demo cobra command",
         Run: func(cmd *cobra.Command, args []string) {
             // Do Stuff Here
         }, 
-    },
-    // optional go-prompt options can be passed here
-    GoPromptOptions: []prompt.Option{
-        prompt.OptionMaxSuggestion(10),
     },
 }
 
@@ -105,7 +100,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Acknowledgements
 - [cobra](https://github.com/spf13/cobra)
-- [go-prompt](https://github.com/c-bata/go-prompt)
+- [tview](https://github.com/rivo/tview)
 
 [build-shield]: https://travis-ci.com/arjit95/cobi.svg?branch=main
 [build-url]: https://travis-ci.com/arjit95/cobi

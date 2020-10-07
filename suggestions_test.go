@@ -8,11 +8,11 @@ func TestInvalidCommandCompletion(t *testing.T) {
 	scenarioTable := []scenario{
 		{
 			command:            "invalid",
-			expectedSuggestion: []string{},
+			expectedSuggestion: nil,
 		},
 		{
 			command:            "test1invalid",
-			expectedSuggestion: []string{},
+			expectedSuggestion: nil,
 		},
 	}
 
@@ -23,11 +23,11 @@ func TestFlagCompletion(t *testing.T) {
 	scenarioTable := []scenario{
 		{
 			command:            "test2 --d",
-			expectedSuggestion: []string{"--debug"},
+			expectedSuggestion: []string{"test2 --debug"},
 		},
 		{
 			command:            "test2 -",
-			expectedSuggestion: []string{"--debug", "-d", "--help", "-h"},
+			expectedSuggestion: []string{"test2 --debug", "test2 -d", "test2 --help", "test2 -h"},
 		},
 	}
 
@@ -50,15 +50,11 @@ func TestGeneratedSuggestions(t *testing.T) {
 	scenarioTable := []scenario{
 		{
 			command:            "test1 S",
-			expectedSuggestion: []string{"Suggestion1"},
+			expectedSuggestion: []string{"test1 Suggestion1", "test1 DiffSuggestion"},
 		},
 		{
 			command:            "test2 dee",
-			expectedSuggestion: []string{"deep"},
-		},
-		{
-			command:            "ex",
-			expectedSuggestion: []string{"exit"},
+			expectedSuggestion: []string{"test2 deep"},
 		},
 	}
 

@@ -1,28 +1,43 @@
 package cobi
 
 import (
+	"fmt"
 	"os"
 	"strings"
 
-	"github.com/c-bata/go-prompt"
+	"github.com/arjit95/cobi/editor"
+	"github.com/google/shlex"
+	"github.com/rivo/tview"
 	"github.com/spf13/cobra"
 )
 
 // Command is a modified struct to handle interactive sessions
-// combined with go-prompt & cobra.
+// combined with tview & cobra.
 type Command struct {
-	RootCmd         *cobra.Command
-	GoPromptOptions []prompt.Option
+	*cobra.Command
+	app    *tview.Application
+	editor *editor.Editor
 }
 
 // AddCommand adds a new child to an existing command
 func (co *Command) AddCommand(nCo *Command) {
-	co.RootCmd.AddCommand(nCo.RootCmd)
+	co.Command.AddCommand(nCo.Command)
 }
 
-// Execute runs the command
-func (co *Command) Execute() error {
-	return co.RootCmd.Execute()
+func (co *Command) onError(err error) {
+	if err != nil {
+		fmt.Fprintf(co.editor.Logger.Error, "%s\n", err)
+	}
+}
+
+func (co *Command) execute(in string) error {
+	promptArgs, err := shlex.Split(in)
+	if err != nil {
+		return err
+	}
+
+	os.Args = append([]string{os.Args[0]}, promptArgs...)
+	return co.Execute()
 }
 
 func trimEmptyLines(args []string) []string {
@@ -35,17 +50,4 @@ func trimEmptyLines(args []string) []string {
 	}
 
 	return lines
-}
-
-// InitDefaultExitCmd adds an exit command. Useful while running in interactive shell
-func (co *Command) InitDefaultExitCmd() {
-	co.AddCommand(&Command{
-		RootCmd: &cobra.Command{
-			Use:   "exit",
-			Short: "Exits the app",
-			Run: func(cmd *cobra.Command, args []string) {
-				os.Exit(0)
-			},
-		},
-	})
 }
