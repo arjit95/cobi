@@ -35,7 +35,7 @@
 Cobra provides a great way to build cli applications whereas go prompt provides powerful interactive prompts. But there are scenarios where the cli application needs to execute a long running task, for eg _port forwarding in kubernetes_. This could be solved with an interactive prompt, whereas normal operations can still work with the default cli application.
 
 ## Overview
-cobi works by using command completion provided by cobra. These completions are propagated to go prompt providing almost the same experience in both interactive and cli modes.
+cobi works by using command completion provided by cobra. These completions are propagated to go prompt providing almost the same experience in both interactive and cli modes. Since cobi implements the same interface as cobra, it becomes very easy to port your existing project to cobi.
 
 ## Installing
 First, use go get to install the latest version of the library. This command will download cobi with all its dependencies:
@@ -87,10 +87,10 @@ var cmd = &cobi.Command {
 cmd.Execute()
 
 // Alternaitvely run the command in interactive mode
-// Add an exit command to the shell
-cmd.InitDefaultExitCmd()
+// Ctrl+C to exit
 cmd.RunInteractive()
 ```
+You only need to wrap the top most command, to use the interactive mode.
 
 ## Contributions
 Contributions are welcome, this was my first experience with golang so a lot of things may not be up to the mark. Feel free to open an issue or raise a pull request.

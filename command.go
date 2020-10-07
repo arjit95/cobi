@@ -15,8 +15,9 @@ import (
 // combined with tview & cobra.
 type Command struct {
 	*cobra.Command
-	app    *tview.Application
-	editor *editor.Editor
+	app        *tview.Application
+	Editor     *editor.Editor
+	interactve bool
 }
 
 // AddCommand adds a new child to an existing command
@@ -26,7 +27,7 @@ func (co *Command) AddCommand(nCo *Command) {
 
 func (co *Command) onError(err error) {
 	if err != nil {
-		fmt.Fprintf(co.editor.Logger.Error, "%s\n", err)
+		fmt.Fprintf(co.Editor.Logger.Error, "%s\n", err)
 	}
 }
 
