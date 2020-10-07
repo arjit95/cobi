@@ -46,9 +46,7 @@ func init() {
 
 	// Add an interactive flag and wrap your command with cobi
 	cmd1.PersistentFlags().BoolVarP(&interactive, "interactive", "i", false, "Run shell in interactive mode")
-	cmd = &cobi.Command{
-		Command: cmd1,
-	}
+	cmd = cobi.NewCommand(cmd1)
 }
 
 func main() {

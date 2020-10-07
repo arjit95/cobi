@@ -18,12 +18,10 @@ type scenario struct {
 }
 
 func init() {
-	root = &Command{
-		Command: &cobra.Command{
-			Use:   "cobi-test",
-			Short: "Test cases for cobi",
-		},
-	}
+	root = NewCommand(&cobra.Command{
+		Use:   "cobi-test",
+		Short: "Test cases for cobi",
+	})
 
 	testCommands := []*Command{
 		&Command{

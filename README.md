@@ -25,6 +25,8 @@
 * [Overview](#overview)
 * [Installing](#installing)
 * [Migrating from cobra](#migrating-from-cobra)
+* [Shortcuts](#shortcuts)
+* [TODO](#todo)
 * [Contributions](#contributions)
 * [License](#license)
 * [Acknowledgements](#acknowledgements)
@@ -32,10 +34,10 @@
 ## About The Project
 ![cobi Screenshot](_images/screenshot.svg)
 
-Cobra provides a great way to build cli applications whereas go prompt provides powerful interactive prompts. But there are scenarios where the cli application needs to execute a long running task, for eg _port forwarding in kubernetes_. This could be solved with an interactive prompt, whereas normal operations can still work with the default cli application.
+Cobra provides a great way to build cli applications whereas tview provides powerful cui. But there are scenarios where the application needs to execute a long running task, for eg _port forwarding in kubernetes_. This could be solved with an interactive prompt, while normal operations can still work with the default cli application.
 
 ## Overview
-cobi works by using command completion provided by cobra. These completions are propagated to go prompt providing almost the same experience in both interactive and cli modes. Since cobi implements the same interface as cobra, it becomes very easy to port your existing project to cobi.
+cobi works by using command completion provided by cobra. These completions are propagated to tview providing almost the same experience in both interactive and cli modes. Since cobi implements the same interface as cobra, it becomes very easy to port your existing project to cobi.
 
 ## Installing
 First, use go get to install the latest version of the library. This command will download cobi with all its dependencies:
@@ -73,15 +75,15 @@ import (
     "github.com/spf13/cobra"
 )
 
-var cmd = &cobi.Command {
-    Command: &cobra.Command{
-        Use:   "demo",
-        Short: "This is a demo cobra command",
-        Run: func(cmd *cobra.Command, args []string) {
-            // Do Stuff Here
-        }, 
-    },
-}
+// Only wrapping the top most command is sufficient
+// There is no need to touch other commands.
+var cmd = cobi.NewCommand(&cobra.Command{
+  Use:   "demo",
+  Short: "This is a demo cobra command",
+  Run: func(cmd *cobra.Command, args []string) {
+      // Do Stuff Here
+  }, 
+})
 
 // Execute the command normally
 cmd.Execute()
@@ -91,6 +93,20 @@ cmd.Execute()
 cmd.RunInteractive()
 ```
 You only need to wrap the top most command, to use the interactive mode.
+
+## Shortcuts
+| Shortcut    	| Operation                         	|
+|-------------	|-----------------------------------	|
+| `Ctrl+L`    	| Clear logger pane                 	|
+| `Ctrl+O`    	| Clear output pane                 	|
+| `Up`        	| Previous command                  	|
+| `Down`      	| Next command                      	|
+| `Tab`       	| Focus next suggestion             	|
+| `Shift+Tab` 	| Focus previous suggestion         	|
+| `Enter`     	| Execute command/Select suggestion 	|
+
+## TODO
+- We should suggest only the next keyword instead of populating the entire command. This could be useful for long commands. Currently tview only provides the functionality for replacing the text in input field, there is no option to append the auto complete suggestion. A workaround would be to add a completely new input type based on original tview inputfield with better append suggestion support.
 
 ## Contributions
 Contributions are welcome, this was my first experience with golang so a lot of things may not be up to the mark. Feel free to open an issue or raise a pull request.

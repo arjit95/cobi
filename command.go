@@ -15,7 +15,7 @@ import (
 // combined with tview & cobra.
 type Command struct {
 	*cobra.Command
-	app        *tview.Application
+	App        *tview.Application
 	Editor     *editor.Editor
 	interactve bool
 }
