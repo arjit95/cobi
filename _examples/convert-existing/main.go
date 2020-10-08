@@ -59,7 +59,7 @@ func main() {
 
 	if interactive {
 		cmd.Flag("interactive").Hidden = true
-		cmd.BuildInteractiveSession(true)
+		cmd.ExecuteInteractive()
 	} else {
 		cmd.Execute()
 	}

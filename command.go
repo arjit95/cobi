@@ -15,14 +15,10 @@ import (
 // combined with tview & cobra.
 type Command struct {
 	*cobra.Command
-	App        *tview.Application
-	Editor     *editor.Editor
-	interactve bool
-}
-
-// AddCommand adds a new child to an existing command
-func (co *Command) AddCommand(nCo *Command) {
-	co.Command.AddCommand(nCo.Command)
+	App         *tview.Application
+	Editor      *editor.Editor
+	interactive bool
+	pipes       *iopipes
 }
 
 func (co *Command) onError(err error) {
@@ -51,4 +47,15 @@ func trimEmptyLines(args []string) []string {
 	}
 
 	return lines
+}
+
+// NewCommand returns an instance of cobi command
+func NewCommand(cmd *cobra.Command) *Command {
+	instance := &Command{
+		App:     tview.NewApplication(),
+		Editor:  editor.NewEditor(),
+		Command: cmd,
+	}
+
+	return instance
 }

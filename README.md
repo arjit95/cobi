@@ -90,9 +90,8 @@ cmd.Execute()
 
 // Alternaitvely run the command in interactive mode
 // Ctrl+C to exit
-cmd.RunInteractive()
+cmd.ExecuteInteractive()
 ```
-You only need to wrap the top most command, to use the interactive mode.
 
 ## Shortcuts
 | Shortcut    	| Operation                         	|

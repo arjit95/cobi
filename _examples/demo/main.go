@@ -21,7 +21,7 @@ func init() {
 
 	pods := []string{"pod-11", "pod-12", "pod-2"}
 
-	cmd.AddCommand(cobi.NewCommand(&cobra.Command{
+	cmd.AddCommand(&cobra.Command{
 		Use:   "pods",
 		Short: "List all pods",
 		Run: func(cmd *cobra.Command, args []string) {
@@ -29,9 +29,9 @@ func init() {
 				cmd.Printf("%s\n", pod)
 			}
 		},
-	}))
+	})
 
-	cmd.AddCommand(cobi.NewCommand(&cobra.Command{
+	cmd.AddCommand(&cobra.Command{
 		Use:       "get",
 		Short:     "Get pod info",
 		Args:      cobra.ExactValidArgs(1),
@@ -39,9 +39,9 @@ func init() {
 		Run: func(cmd *cobra.Command, args []string) {
 			cmd.Printf("%s info\n", args[0])
 		},
-	}))
+	})
 
-	cmd.AddCommand(cobi.NewCommand(&cobra.Command{
+	cmd.AddCommand(&cobra.Command{
 		Use:   "log",
 		Short: "Log messasge to logger",
 		Args:  cobra.ExactArgs(1),
@@ -52,7 +52,7 @@ func init() {
 				fmt.Printf("[Info] %s\n", args[0])
 			}
 		},
-	}))
+	})
 
 	cmd.PersistentFlags().BoolVarP(&interactive, "interactive", "i", false, "Run shell in interactive mode")
 }
@@ -68,7 +68,7 @@ func main() {
 	if interactive {
 		cmd.Editor.SetUpperPaneTitle("Cobi Demo")
 		cmd.Flag("interactive").Hidden = true
-		cmd.BuildInteractiveSession(true)
+		cmd.ExecuteInteractive()
 	} else {
 		cmd.Execute()
 	}

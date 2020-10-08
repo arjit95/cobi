@@ -17,34 +17,34 @@ func init() {
 		Short: "Simple demo command",
 	})
 
-	cmd.AddCommand(cobi.NewCommand(&cobra.Command{
+	cmd.AddCommand(&cobra.Command{
 		Use:   "info",
 		Short: "Log messasge to logger",
 		Args:  cobra.ExactArgs(1),
 		Run: func(_ *cobra.Command, args []string) {
 			fmt.Fprint(cmd.Editor.Logger.Info, args[0]+"\n")
 		},
-	}))
+	})
 
-	cmd.AddCommand(cobi.NewCommand(&cobra.Command{
+	cmd.AddCommand(&cobra.Command{
 		Use:   "error",
 		Short: "Log messasge to logger",
 		Args:  cobra.ExactArgs(1),
 		Run: func(_ *cobra.Command, args []string) {
 			fmt.Fprint(cmd.Editor.Logger.Error, args[0]+"\n")
 		},
-	}))
+	})
 
-	cmd.AddCommand(cobi.NewCommand(&cobra.Command{
+	cmd.AddCommand(&cobra.Command{
 		Use:   "warn",
 		Short: "Log messasge to logger",
 		Args:  cobra.ExactArgs(1),
 		Run: func(_ *cobra.Command, args []string) {
 			fmt.Fprint(cmd.Editor.Logger.Warn, args[0]+"\n")
 		},
-	}))
+	})
 }
 
 func main() {
-	cmd.BuildInteractiveSession(true)
+	cmd.ExecuteInteractive()
 }

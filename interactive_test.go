@@ -2,63 +2,49 @@ package cobi
 
 import (
 	"errors"
-	"sync"
 	"testing"
 
+	"github.com/gdamore/tcell"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestInteractiveValidCmd(t *testing.T) {
-	if !root.InteractiveMode() {
-		root.BuildInteractiveSession(false)
-	}
-
 	editor := root.Editor
-
-	wg := &sync.WaitGroup{}
-	wg.Add(1)
 
 	editor.SetCommandExecFunc(func(str string) error {
 		assert.Equal(t, "test1", str)
 		assert.Equal(t, root.InteractiveMode(), true)
-		defer wg.Done()
 		return nil
 	})
 
-	editor.Input.SetText("test1")
-	editor.Input.Done()
-	wg.Wait()
+	root.App.SetBeforeDrawFunc(func(_ tcell.Screen) bool {
+		editor.Input.SetText("test1")
+		editor.Input.Done()
+		root.App.QueueEvent(tcell.NewEventKey(tcell.KeyCtrlO, 0, tcell.ModNone))
+		root.App.QueueEvent(tcell.NewEventKey(tcell.KeyCtrlE, 0, tcell.ModNone))
+		defer root.App.QueueEvent(tcell.NewEventKey(tcell.KeyCtrlC, 0, tcell.ModNone))
+		return true
+	})
+
+	root.ExecuteInteractive()
 }
 
 func TestInteractiveInvalidCmd(t *testing.T) {
-	if !root.InteractiveMode() {
-		root.BuildInteractiveSession(false)
-	}
+	root = NewCommand(root.Command)
 
 	editor := root.Editor
 
-	wg := &sync.WaitGroup{}
-	wg.Add(2)
-
-	invalidCommand := false
-
 	editor.SetCommandExecFunc(func(str string) error {
-		assert.Equal(t, "test1 asdasdasd", str)
-		defer wg.Done()
+		assert.Equal(t, "test1 ", str)
 		return errors.New("Invalid command")
 	})
 
-	editor.SetErrorFunc(func(err error) {
-		invalidCommand = true
-		root.onError(err)
-		defer wg.Done()
+	root.App.SetBeforeDrawFunc(func(_ tcell.Screen) bool {
+		editor.Input.SetText("test1 invalid")
+		editor.Input.Done()
+		root.App.QueueEvent(tcell.NewEventKey(tcell.KeyCtrlC, 0, tcell.ModNone))
+		return true
 	})
 
-	t.Logf("setting txt")
-	editor.Input.SetText("test1 asdasdasd")
-	t.Logf("text txt")
-	editor.Input.Done()
-
-	wg.Wait()
-	assert.Equal(t, true, invalidCommand)
+	root.ExecuteInteractive()
 }

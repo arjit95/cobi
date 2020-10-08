@@ -23,37 +23,31 @@ func init() {
 		Short: "Test cases for cobi",
 	})
 
-	testCommands := []*Command{
-		&Command{
-			Command: &cobra.Command{
-				Use:   "test1",
-				Short: "Description for test1",
-				Args:  cobra.ExactValidArgs(1),
-				Run: func(cmd *cobra.Command, args []string) {
-					fmt.Printf("Test1 args %v\n", args)
-				},
-				ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-					return []string{"Suggestion1", "DiffSuggestion"}, cobra.ShellCompDirectiveNoFileComp
-				},
+	testCommands := []*cobra.Command{
+		&cobra.Command{
+			Use:   "test1",
+			Short: "Description for test1",
+			Args:  cobra.ExactValidArgs(1),
+			Run: func(cmd *cobra.Command, args []string) {
+				fmt.Printf("Test1 args %v\n", args)
+			},
+			ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+				return []string{"Suggestion1", "DiffSuggestion"}, cobra.ShellCompDirectiveNoFileComp
 			},
 		},
-		&Command{
-			Command: &cobra.Command{
-				Use: "test2",
-				Run: func(cmd *cobra.Command, args []string) {
+		&cobra.Command{
+			Use: "test2",
+			Run: func(cmd *cobra.Command, args []string) {
 
-				},
 			},
 		},
 	}
 
 	testCommands[1].LocalFlags().BoolP("debug", "d", false, "Testing debug flag")
-	testCommands[1].AddCommand(&Command{
-		Command: &cobra.Command{
-			Use:   "deep",
-			Short: "Nested command for test2",
-			Run:   func(cmd *cobra.Command, args []string) {},
-		},
+	testCommands[1].AddCommand(&cobra.Command{
+		Use:   "deep",
+		Short: "Nested command for test2",
+		Run:   func(cmd *cobra.Command, args []string) {},
 	})
 
 	for _, cmd := range testCommands {

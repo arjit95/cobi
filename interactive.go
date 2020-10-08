@@ -1,11 +1,24 @@
 package cobi
 
 import (
-	Editor "github.com/arjit95/cobi/editor"
+	"io"
+	"os"
+
 	"github.com/gdamore/tcell"
-	"github.com/rivo/tview"
-	"github.com/spf13/cobra"
 )
+
+type iopipes struct {
+	stdoutW *os.File
+	stdoutR *os.File
+	stderrR *os.File
+	stderrW *os.File
+
+	oStdout *os.File
+	oStderr *os.File
+
+	stdoutChan chan error
+	stderrChan chan error
+}
 
 func (co *Command) handleInputEvents(event *tcell.EventKey) *tcell.EventKey {
 	switch event.Key() {
@@ -23,12 +36,34 @@ func (co *Command) handleInputEvents(event *tcell.EventKey) *tcell.EventKey {
 // InteractiveMode returns true if the commands are running
 // in interactive mode
 func (co *Command) InteractiveMode() bool {
-	return co.interactve
+	return co.interactive
 }
 
-// BuildInteractiveSession will start the shell in interactive mode
-// start bool is for testing purposes, it should always be set to true.
-func (co *Command) BuildInteractiveSession(start bool) {
+func (co *Command) pipeStdio() *iopipes {
+	pipes := &iopipes{}
+
+	pipes.stdoutR, pipes.stdoutW, _ = os.Pipe()
+	pipes.stderrR, pipes.stderrW, _ = os.Pipe()
+
+	pipes.oStdout = os.Stdout
+	pipes.oStderr = os.Stderr
+
+	os.Stdout = pipes.stdoutW
+	os.Stderr = pipes.stderrW
+
+	go func() {
+		io.Copy(co.Editor.Output, pipes.stdoutR)
+	}()
+
+	go func() {
+		io.Copy(co.Editor.Logger.Error, pipes.stderrR)
+	}()
+
+	return pipes
+}
+
+// ExecuteInteractive will start the execute the command in interactive mode
+func (co *Command) ExecuteInteractive() error {
 	if co.Editor.GetUpperPaneTitle() == "" {
 		co.Editor.SetUpperPaneTitle("Commands")
 	}
@@ -44,24 +79,15 @@ func (co *Command) BuildInteractiveSession(start bool) {
 	co.SetOut(co.Editor.Output)
 	co.Editor.SetErrorFunc(co.onError)
 	co.App.SetInputCapture(co.handleInputEvents)
-	co.interactve = true
+	co.interactive = true
 
-	if !start {
-		return
-	}
+	co.pipes = co.pipeStdio()
+	err := co.App.SetRoot(co.Editor.View, true).EnableMouse(true).Run()
+	co.pipes.stderrW.Close()
+	co.pipes.stdoutW.Close()
 
-	if err := co.App.SetRoot(co.Editor.View, true).EnableMouse(true).Run(); err != nil {
-		panic(err)
-	}
-}
+	os.Stdout = co.pipes.oStdout
+	os.Stderr = co.pipes.oStderr
 
-// NewCommand returns an instance of cobi command
-func NewCommand(cmd *cobra.Command) *Command {
-	instance := &Command{
-		App:     tview.NewApplication(),
-		Editor:  Editor.NewEditor(),
-		Command: cmd,
-	}
-
-	return instance
+	return err
 }
