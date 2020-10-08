@@ -26,7 +26,8 @@ func TestInteractiveValidCmd(t *testing.T) {
 		return true
 	})
 
-	root.ExecuteInteractive()
+	err := root.ExecuteInteractive()
+	assert.NoError(t, err)
 }
 
 func TestInteractiveInvalidCmd(t *testing.T) {
@@ -46,5 +47,6 @@ func TestInteractiveInvalidCmd(t *testing.T) {
 		return true
 	})
 
-	root.ExecuteInteractive()
+	err := root.ExecuteInteractive()
+	assert.NoError(t, err)
 }
