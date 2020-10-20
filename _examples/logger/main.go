@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/arjit95/cobi"
+	"github.com/arjit95/cobi/editor"
 	"github.com/spf13/cobra"
 )
 
@@ -15,7 +16,7 @@ func init() {
 	cmd = cobi.NewCommand(&cobra.Command{
 		Use:   "logger",
 		Short: "Simple demo command",
-	})
+	}, editor.NewEditor())
 
 	cmd.AddCommand(&cobra.Command{
 		Use:   "info",

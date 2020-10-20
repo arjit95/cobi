@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/arjit95/cobi"
+	"github.com/arjit95/cobi/editor"
 	"github.com/spf13/cobra"
 )
 
@@ -17,7 +18,7 @@ func init() {
 	cmd = cobi.NewCommand(&cobra.Command{
 		Use:   "demo",
 		Short: "Simple demo command",
-	})
+	}, editor.NewEditor())
 
 	pods := []string{"pod-11", "pod-12", "pod-2"}
 

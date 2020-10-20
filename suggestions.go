@@ -32,15 +32,17 @@ func (co *Command) generateSuggestions(text string) []string {
 	co.SetOut(buffer)
 	co.SetErr(buffer)
 
+	if len(promptArgs) == 0 {
+		promptArgs = append(promptArgs, "")
+	}
+
 	co.generateDefaultFlagSuggestions(promptArgs)
-	bArgs := os.Args
-	os.Args = append([]string{bArgs[0], "__complete"}, promptArgs...)
+	os.Args = append([]string{os.Args[0], "__complete"}, promptArgs...)
 	err = co.Execute()
 
 	// Restore output
 	co.SetOut(bOut)
 	co.SetErr(bErr)
-	os.Args = bArgs
 
 	if err != nil {
 		return nil

@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/arjit95/cobi"
+	"github.com/arjit95/cobi/editor"
 	"github.com/spf13/cobra"
 )
 
@@ -46,7 +47,7 @@ func init() {
 
 	// Add an interactive flag and wrap your command with cobi
 	cmd1.PersistentFlags().BoolVarP(&interactive, "interactive", "i", false, "Run shell in interactive mode")
-	cmd = cobi.NewCommand(cmd1)
+	cmd = cobi.NewCommand(cmd1, editor.NewEditor())
 }
 
 func main() {

@@ -6,6 +6,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/arjit95/cobi/editor"
 	"github.com/spf13/cobra"
 	"github.com/stretchr/testify/assert"
 )
@@ -21,7 +22,7 @@ func init() {
 	root = NewCommand(&cobra.Command{
 		Use:   "cobi-test",
 		Short: "Test cases for cobi",
-	})
+	}, editor.NewEditor())
 
 	testCommands := []*cobra.Command{
 		{

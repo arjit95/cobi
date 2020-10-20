@@ -72,6 +72,7 @@ This would be re-written as
 ```go
 import (
     "github.com/arjit95/cobi"
+    "github.com/arjit95/cobi/editor"
     "github.com/spf13/cobra"
 )
 
@@ -83,7 +84,7 @@ var cmd = cobi.NewCommand(&cobra.Command{
   Run: func(cmd *cobra.Command, args []string) {
       // Do Stuff Here
   }, 
-})
+}, editor.NewEditor())
 
 // Execute the command normally
 cmd.Execute()

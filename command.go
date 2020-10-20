@@ -18,7 +18,6 @@ type Command struct {
 	App         *tview.Application
 	Editor      *editor.Editor
 	interactive bool
-	pipes       *iopipes
 }
 
 func (co *Command) onError(err error) {
@@ -50,10 +49,10 @@ func trimEmptyLines(args []string) []string {
 }
 
 // NewCommand returns an instance of cobi command
-func NewCommand(cmd *cobra.Command) *Command {
+func NewCommand(cmd *cobra.Command, editor *editor.Editor) *Command {
 	instance := &Command{
 		App:     tview.NewApplication(),
-		Editor:  editor.NewEditor(),
+		Editor:  editor,
 		Command: cmd,
 	}
 

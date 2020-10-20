@@ -4,6 +4,7 @@ import (
 	"errors"
 	"testing"
 
+	cobiEditor "github.com/arjit95/cobi/editor"
 	"github.com/gdamore/tcell"
 	"github.com/stretchr/testify/assert"
 )
@@ -31,9 +32,8 @@ func TestInteractiveValidCmd(t *testing.T) {
 }
 
 func TestInteractiveInvalidCmd(t *testing.T) {
-	root = NewCommand(root.Command)
-
-	editor := root.Editor
+	editor := cobiEditor.NewEditor()
+	root = NewCommand(root.Command, editor)
 
 	editor.SetCommandExecFunc(func(str string) error {
 		assert.Equal(t, "test1 ", str)
