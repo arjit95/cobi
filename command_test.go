@@ -24,7 +24,7 @@ func init() {
 	})
 
 	testCommands := []*cobra.Command{
-		&cobra.Command{
+		{
 			Use:   "test1",
 			Short: "Description for test1",
 			Args:  cobra.ExactValidArgs(1),
@@ -35,7 +35,7 @@ func init() {
 				return []string{"Suggestion1", "DiffSuggestion"}, cobra.ShellCompDirectiveNoFileComp
 			},
 		},
-		&cobra.Command{
+		{
 			Use: "test2",
 			Run: func(cmd *cobra.Command, args []string) {
 
@@ -43,7 +43,12 @@ func init() {
 		},
 	}
 
-	testCommands[1].LocalFlags().BoolP("debug", "d", false, "Testing debug flag")
+	testCommands[1].Flags().BoolP("debug", "d", false, "Testing debug flag")
+	testCommands[1].Flags().String("namespace", "", "Select namespace")
+	testCommands[1].RegisterFlagCompletionFunc("namespace", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return []string{"ns1", "ns2"}, cobra.ShellCompDirectiveNoFileComp
+	})
+
 	testCommands[1].AddCommand(&cobra.Command{
 		Use:   "deep",
 		Short: "Nested command for test2",

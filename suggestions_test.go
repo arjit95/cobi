@@ -27,7 +27,15 @@ func TestFlagCompletion(t *testing.T) {
 		},
 		{
 			command:            "test2 -",
-			expectedSuggestion: []string{"test2 --debug", "test2 -d", "test2 --help", "test2 -h"},
+			expectedSuggestion: []string{"test2 --debug", "test2 -d", "test2 --help", "test2 -h", "test2 --namespace"},
+		},
+		{
+			command:            "test2 --namespace=n",
+			expectedSuggestion: []string{"test2 --namespace=ns1", "test2 --namespace=ns2"},
+		},
+		{
+			command:            "test2 --namespace n",
+			expectedSuggestion: []string{"test2 --namespace ns1", "test2 --namespace ns2"},
 		},
 	}
 

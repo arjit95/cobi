@@ -33,12 +33,14 @@ func (co *Command) generateSuggestions(text string) []string {
 	co.SetErr(buffer)
 
 	co.generateDefaultFlagSuggestions(promptArgs)
-	os.Args = append([]string{os.Args[0], "__complete"}, promptArgs...)
+	bArgs := os.Args
+	os.Args = append([]string{bArgs[0], "__complete"}, promptArgs...)
 	err = co.Execute()
 
 	// Restore output
 	co.SetOut(bOut)
 	co.SetErr(bErr)
+	os.Args = bArgs
 
 	if err != nil {
 		return nil
@@ -58,13 +60,28 @@ func (co *Command) generateSuggestions(text string) []string {
 	var suggestions []string
 	for _, command := range commands {
 		cmdMeta := strings.SplitN(command, "\t", 2)
-		var suggestion []string
-
-		if len(promptArgs) > 0 {
-			suggestion = promptArgs[:len(promptArgs)-1]
+		paLen := len(promptArgs)
+		if paLen == 1 {
+			suggestions = append(suggestions, cmdMeta[0])
+			continue
 		}
 
+		last := promptArgs[paLen-1]
+		isFlag := strings.Index(last, "-") == 0
+		suggestion := promptArgs[:paLen-1]
 		suggestion = append(suggestion, cmdMeta[0])
+
+		// Complete normal suggestions or flags having type
+		// --flag value
+		if !isFlag || strings.Index(last, "=") == -1 {
+			suggestions = append(suggestions, strings.Join(suggestion, " "))
+			continue
+		}
+
+		// complete -flag=value
+		parts := strings.Split(last, "=")
+		parts[1] = cmdMeta[0]
+		suggestion[len(suggestion)-1] = strings.Join(parts, "=")
 		suggestions = append(suggestions, strings.Join(suggestion, " "))
 	}
 

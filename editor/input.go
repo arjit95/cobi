@@ -7,8 +7,6 @@ import (
 	"github.com/rivo/tview"
 )
 
-type autoCompleteFn func(string) []string
-
 // Input handles all the commands entered during interactive mode
 type Input struct {
 	*tview.InputField
@@ -16,7 +14,6 @@ type Input struct {
 	errorFunc       func(error)
 	history         []string
 	historyIdx      int
-	autoCompleteFn  autoCompleteFn
 	text            string
 }
 

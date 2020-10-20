@@ -62,7 +62,7 @@ func (co *Command) pipeStdio() *iopipes {
 	return pipes
 }
 
-// ExecuteInteractive will start the execute the command in interactive mode
+// ExecuteInteractive will start the command in interactive mode
 func (co *Command) ExecuteInteractive() error {
 	if co.Editor.GetUpperPaneTitle() == "" {
 		co.Editor.SetUpperPaneTitle("Commands")
