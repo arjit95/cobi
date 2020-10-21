@@ -37,7 +37,7 @@ func (co *Command) generateSuggestions(text string) []string {
 	}
 
 	co.generateDefaultFlagSuggestions(promptArgs)
-	os.Args = append([]string{os.Args[0], "__complete"}, promptArgs...)
+	os.Args = append([]string{co.Use, "__complete"}, promptArgs...)
 	err = co.Execute()
 
 	// Restore output
