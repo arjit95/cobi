@@ -21,7 +21,7 @@ func TestEditorSupport(t *testing.T) {
 
 	editor.SetCommandExecFunc(func(str string) error {
 		assert.Equal(t, "test1", str)
-		assert.Equal(t, editor.Logger.Info.output.GetText(true), "[Info] Hello World")
+		assert.Equal(t, editor.Logger.View.GetText(true), "[Info] Hello World")
 
 		return nil
 	})

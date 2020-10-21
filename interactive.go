@@ -7,7 +7,7 @@ import (
 func (co *Command) handleInputEvents(event *tcell.EventKey) *tcell.EventKey {
 	switch event.Key() {
 	case tcell.KeyCtrlO:
-		co.Editor.Output.SetText("")
+		co.Editor.Output.View.SetText("")
 		break
 	case tcell.KeyCtrlL:
 		co.Editor.Logger.ClearLogger()

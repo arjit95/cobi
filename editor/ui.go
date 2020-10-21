@@ -35,20 +35,22 @@ func (editor *Editor) Render(app *tview.Application) {
 	child := tview.NewFlex().SetDirection(tview.FlexRow)
 
 	if editor.GetUpperPaneTitle() != "" {
-		editor.Output.SetTitle(editor.upperPaneTitle).SetBorder(true)
+		editor.Output.View.SetTitle(editor.upperPaneTitle).SetBorder(true)
 	}
 
-	editor.Output.SetBorder(true)
-	child = child.AddItem(editor.Output, 0, 2, false)
+	editor.Output.View.SetBorder(true)
+	child = child.AddItem(editor.Output.View, 0, 2, false)
 	child.AddItem(editor.Input, 1, 1, true)
 	view = view.AddItem(child, 0, 2, true)
 
 	if editor.GetLowerPaneTitle() != "" {
-		editor.Logger.output.SetTitle(editor.lowerPaneTitle)
+		editor.Logger.View.SetTitle(editor.lowerPaneTitle)
 	}
 
-	editor.Logger.output.SetBorder(true)
-	view = child.AddItem(editor.Logger.output, 0, 1, false)
+	editor.Logger.View.SetBorder(true)
+	view = child.AddItem(editor.Logger.View, 0, 1, false)
 	editor.View = view
 	editor.app = app
+	editor.Logger.SetPrimaryAvailable(false)
+	editor.Output.writer.primaryAvailable = false
 }

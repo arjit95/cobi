@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/arjit95/cobi/editor"
+	cobiEditor "github.com/arjit95/cobi/editor"
 	"github.com/spf13/cobra"
 	"github.com/stretchr/testify/assert"
 )
@@ -19,10 +19,14 @@ type scenario struct {
 }
 
 func init() {
-	root = NewCommand(&cobra.Command{
+	editor := cobiEditor.NewEditor()
+	editor.SetUpperPaneTitle("Test")
+	editor.SetLowerPaneTitle("Logs")
+
+	root = NewCommand(editor, &cobra.Command{
 		Use:   "cobi-test",
 		Short: "Test cases for cobi",
-	}, editor.NewEditor())
+	})
 
 	testCommands := []*cobra.Command{
 		{

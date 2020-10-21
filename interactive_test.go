@@ -33,7 +33,7 @@ func TestInteractiveValidCmd(t *testing.T) {
 
 func TestInteractiveInvalidCmd(t *testing.T) {
 	editor := cobiEditor.NewEditor()
-	root = NewCommand(root.Command, editor)
+	root = NewCommand(editor, root.Command)
 
 	editor.SetCommandExecFunc(func(str string) error {
 		assert.Equal(t, "test1 ", str)

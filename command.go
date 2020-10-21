@@ -49,7 +49,7 @@ func trimEmptyLines(args []string) []string {
 }
 
 // NewCommand returns an instance of cobi command
-func NewCommand(cmd *cobra.Command, editor *editor.Editor) *Command {
+func NewCommand(editor *editor.Editor, cmd *cobra.Command) *Command {
 	instance := &Command{
 		App:     tview.NewApplication(),
 		Editor:  editor,

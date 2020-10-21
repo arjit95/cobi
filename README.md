@@ -58,7 +58,7 @@ Suppose you have an existing cobra command:
 ```go
 import "github.com/spf13/cobra"
 
-var cmd = &cobra.Command{
+cmd := &cobra.Command{
   Use:   "demo",
   Short: "This is a demo cobra command",
   Run: func(cmd *cobra.Command, args []string) {
@@ -78,13 +78,13 @@ import (
 
 // Only wrapping the top most command is sufficient
 // There is no need to touch other commands.
-var cmd = cobi.NewCommand(&cobra.Command{
+cmd := cobi.NewCommand(editor.NewEditor(), &cobra.Command{
   Use:   "demo",
   Short: "This is a demo cobra command",
   Run: func(cmd *cobra.Command, args []string) {
       // Do Stuff Here
   }, 
-}, editor.NewEditor())
+})
 
 // Execute the command normally
 cmd.Execute()

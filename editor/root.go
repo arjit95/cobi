@@ -8,7 +8,7 @@ type Editor struct {
 	View   *tview.Flex
 	Input  *Input
 	Logger *Logger
-	Output *tview.TextView
+	Output *Output
 
 	isLoggerVisible bool
 	upperPaneTitle  string

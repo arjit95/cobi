@@ -13,10 +13,10 @@ var (
 )
 
 func init() {
-	cmd = cobi.NewCommand(&cobra.Command{
+	cmd = cobi.NewCommand(editor.NewEditor(), &cobra.Command{
 		Use:   "logger",
 		Short: "Simple demo command",
-	}, editor.NewEditor())
+	})
 
 	cmd.AddCommand(&cobra.Command{
 		Use:   "info",
