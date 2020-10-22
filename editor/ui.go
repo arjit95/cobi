@@ -53,4 +53,11 @@ func (editor *Editor) Render(app *tview.Application) {
 	editor.app = app
 	editor.Logger.SetPrimaryAvailable(false)
 	editor.Output.writer.primaryAvailable = false
+
+	refreshView := func() {
+		app.Draw()
+	}
+
+	editor.Output.View.SetChangedFunc(refreshView)
+	editor.Logger.View.SetChangedFunc(refreshView)
 }
